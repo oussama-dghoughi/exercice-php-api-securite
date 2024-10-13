@@ -19,7 +19,7 @@ class SocietyController extends AbstractController
     public function __construct(SocietyRepository $societyRepository, EntityManagerInterface $entityManager)
     {
         $this->societyRepository = $societyRepository;
-        $this->entityManager = $entityManager; // Ajout de l'injection de l'EntityManager
+        $this->entityManager = $entityManager; 
     }
 
     #[Route('', name: 'get_societies', methods: ['GET'])]
@@ -27,7 +27,7 @@ public function getSocieties(): JsonResponse
 {
     $societies = $this->societyRepository->findAll();
 
-    // Transformer les sociétés en un tableau JSON
+   
     $societiesArray = [];
     foreach ($societies as $society) {
         $societiesArray[] = [
@@ -35,11 +35,11 @@ public function getSocieties(): JsonResponse
             'name' => $society->getName(),
             'siret' => $society->getSiret(),
             'address' => $society->getAddress(),
-            'email' => $society->getEmail(), // Ajoutez l'email ici
+            'email' => $society->getEmail(), 
         ];
     }
 
-    // Retourner les sociétés sous forme de réponse JSON
+    
     return $this->json($societiesArray);
 }
 

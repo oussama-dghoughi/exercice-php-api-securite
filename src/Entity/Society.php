@@ -4,6 +4,9 @@ namespace App\Entity;
 
 use App\Repository\SocietyRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+
 
 #[ORM\Entity(repositoryClass: SocietyRepository::class)]
 class Society
@@ -26,6 +29,43 @@ class Society
      * @ORM\Column(type="string", unique=true)
     */
     private ?string $email = null; // Champ email ajouté
+
+    #[ORM\OneToMany(targetEntity: Project::class, mappedBy: 'society', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private $projects;
+
+    public function __construct()
+    {
+        $this->projects = new ArrayCollection();
+    }
+
+    // ... autres méthodes existantes ...
+
+    public function getProjects(): Collection
+    {
+        return $this->projects;
+    }
+
+    public function addProject(Project $project): self
+    {
+        if (!$this->projects->contains($project)) {
+            $this->projects[] = $project;
+            $project->setSociety($this); 
+        }
+
+        return $this;
+    }
+
+    public function removeProject(Project $project): self
+    {
+        if ($this->projects->removeElement($project)) {
+           
+            if ($project->getSociety() === $this) {
+                $project->setSociety(null);
+            }
+        }
+
+        return $this;
+    }
 
     public function getId(): ?int
     {
@@ -68,7 +108,7 @@ class Society
         return $this;
     }
 
-    // Getters et setters pour le champ email
+    
 
     public function getEmail(): ?string
     {

@@ -6,6 +6,8 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 //#[ORM\Table(name: 'app_user')]
@@ -22,16 +24,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $email = null;
 
     /**
-     * @var list<string> The user roles
-     */
-    #[ORM\Column]
-    private array $roles = [];
-
-    /**
      * @var string The hashed password
      */
     #[ORM\Column]
     private ?string $password = null;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\UserRole", mappedBy="society", cascade={"persist", "remove"})
+     */
+    private $roles;
+
+    
 
     public function getId(): ?int
     {
@@ -106,5 +109,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    
+
+    public function __construct()
+    {
+        $this->roles = new ArrayCollection();
+    }
+
+    
+
+    public function addRole(UserRole $role): self
+    {
+        if (!$this->roles->contains($role)) {
+            $this->roles[] = $role;
+            $role->setSociety($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRole(UserRole $role): self
+    {
+        if ($this->roles->removeElement($role)) {
+            // Set the owning side to null (unless already changed)
+            if ($role->getSociety() === $this) {
+                $role->setSociety(null);
+            }
+        }
+
+        return $this;
     }
 }
