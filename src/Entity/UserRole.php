@@ -34,7 +34,7 @@ class UserRole
      */
     private $role; // Peut être 'admin', 'manager' ou 'consultant'
 
-    // Getters et Setters
+    
 
     public function getId(): ?int
     {
