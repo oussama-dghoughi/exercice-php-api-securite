@@ -3,33 +3,34 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
 
 #[ORM\Entity]
+#[ApiResource] 
 class Project
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private ?int $id = null; 
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $title;
+    private ?string $title = null; 
 
     #[ORM\Column(type: 'text')]
-    private $description;
+    private ?string $description = null; 
 
     #[ORM\Column(type: 'datetime')]
-    private $createdAt;
+    private \DateTimeInterface $createdAt;
 
     #[ORM\ManyToOne(targetEntity: Society::class, inversedBy: 'projects')]
-    private $society;
+    private ?Society $society = null; 
 
     public function __construct()
     {
         $this->createdAt = new \DateTime();
     }
 
-    
     public function getId(): ?int
     {
         return $this->id;
@@ -57,7 +58,7 @@ class Project
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): \DateTimeInterface
     {
         return $this->createdAt;
     }

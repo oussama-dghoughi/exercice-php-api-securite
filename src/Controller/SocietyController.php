@@ -1,5 +1,7 @@
 <?php
+    // Les méthodes peuvent être réactivées si nécessaire pour répondre à des besoins spécifiques dans le projet.
 
+/*
 namespace App\Controller;
 
 use App\Entity\Society;
@@ -126,3 +128,4 @@ public function getSocieties(): JsonResponse
         return $this->json(['message' => 'Society deleted'], JsonResponse::HTTP_NO_CONTENT);
     }
 }
+*/

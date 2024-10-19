@@ -6,9 +6,10 @@ use App\Repository\SocietyRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-
+use ApiPlatform\Metadata\ApiResource;
 
 #[ORM\Entity(repositoryClass: SocietyRepository::class)]
+#[ApiResource] // Annotation pour exposer cette entité comme une ressource API
 class Society
 {
     #[ORM\Id]
@@ -25,20 +26,16 @@ class Society
     #[ORM\Column(length: 255)]
     private ?string $address = null;
 
-    /**
-     * @ORM\Column(type="string", unique=true)
-    */
-    private ?string $email = null; // Champ email ajouté
+    #[ORM\Column(type: "string", unique: true)] // Correction de l'annotation pour l'email
+    private ?string $email = null;
 
     #[ORM\OneToMany(targetEntity: Project::class, mappedBy: 'society', cascade: ['persist', 'remove'], orphanRemoval: true)]
-    private $projects;
+    private Collection $projects; // Déclaration du type pour projects
 
     public function __construct()
     {
         $this->projects = new ArrayCollection();
     }
-
-    // ... autres méthodes existantes ...
 
     public function getProjects(): Collection
     {
@@ -58,7 +55,6 @@ class Society
     public function removeProject(Project $project): self
     {
         if ($this->projects->removeElement($project)) {
-           
             if ($project->getSociety() === $this) {
                 $project->setSociety(null);
             }
@@ -107,8 +103,6 @@ class Society
 
         return $this;
     }
-
-    
 
     public function getEmail(): ?string
     {

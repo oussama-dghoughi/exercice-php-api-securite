@@ -1,5 +1,9 @@
-<?php
 
+<?php
+// Ce contrôleur est actuellement commenté et laissé en place pour référence future. 
+// Les méthodes peuvent être réactivées si nécessaire pour répondre à des besoins spécifiques dans le projet.
+
+/*
 namespace App\Controller;
 
 use App\Entity\Project;
@@ -81,3 +85,4 @@ public function createProject($societyId)
     }
 }
 }
+*/

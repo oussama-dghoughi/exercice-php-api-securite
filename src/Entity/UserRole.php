@@ -3,38 +3,30 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
 
 /**
  * @ORM\Entity()
  * @ORM\Table(name="user_role")
  */
+#[ApiResource] 
 class UserRole
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="roles")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $user;
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'roles')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Society", inversedBy="roles")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $society;
+    #[ORM\ManyToOne(targetEntity: Society::class, inversedBy: 'roles')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Society $society = null;
 
-    /**
-     * @ORM\Column(type="string")
-     */
-    private $role; // Peut être 'admin', 'manager' ou 'consultant'
-
-    
+    #[ORM\Column(type: 'string')]
+    private string $role; 
 
     public function getId(): ?int
     {
@@ -49,7 +41,6 @@ class UserRole
     public function setUser(?User $user): self
     {
         $this->user = $user;
-
         return $this;
     }
 
@@ -61,11 +52,10 @@ class UserRole
     public function setSociety(?Society $society): self
     {
         $this->society = $society;
-
         return $this;
     }
 
-    public function getRole(): ?string
+    public function getRole(): string
     {
         return $this->role;
     }
@@ -73,7 +63,6 @@ class UserRole
     public function setRole(string $role): self
     {
         $this->role = $role;
-
         return $this;
     }
 }
